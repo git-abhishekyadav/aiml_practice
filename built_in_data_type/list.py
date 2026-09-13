@@ -12,9 +12,11 @@ LIST is MUTABLE sequence of values
 
 # marks = [99, 89, 86, '34', 45.23]
 
+marks[3] = 78               #mutable value can be changed at index
+
 # # print(marks[4])      invalid index
 
-# print(len(marks) -1)  # index
+# print(len(marks) -1)      #last index
 
 # print(type(marks))
 
@@ -43,3 +45,22 @@ print(marks)
 
 marks.reverse()
 print(marks)
+
+
+'''
+    find number in list
+
+    linear search 
+    find at each index to find the value
+'''
+
+nums = [1,3,10,5,8]
+
+x = 10
+i = 0
+
+for val in nums:
+    if val == x:
+        print(f'the value found at {i}',val)
+        break
+    i += 1

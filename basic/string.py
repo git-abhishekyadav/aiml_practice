@@ -1,10 +1,15 @@
-word = 'python'
+# word = 'python'
 
+word1 = "I love"
+word2 = "Python"
 
+#concatenation
+print(word1 + " " + word2)
 
-# print(word[2])
+# print(word[2])           index value
 
 # word[2] = 'T'     Errror string is immutable it can't be changed
+#TypeError str object does not support item assignment
 
 # length of string
 print(len(word))
@@ -30,6 +35,7 @@ print(len(word))
 
 # # and reverse is -n to -1
 # print(word[-4:-2])
+
 
 
 
