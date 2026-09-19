@@ -45,11 +45,12 @@ print((5 > 8) and (5 > 8))
 
 print(not (5 > 8))
 # !T -> F
+
 print((5 > 8) or (5 > 8))
-# T and T -> T
-# T and F -> T
-# F and T -> T
-# F and F -> F
+# T or T -> T
+# T or F -> T
+# F or T -> T
+# F or F -> F
 
 '''
 #Operator precedence

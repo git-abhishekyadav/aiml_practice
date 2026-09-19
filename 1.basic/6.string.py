@@ -12,7 +12,7 @@ print(word1 + " " + word2)
 #TypeError str object does not support item assignment
 
 # length of string
-print(len(word))
+# print(len(word))
 
 # sequence of character
 
@@ -57,7 +57,7 @@ print('the sum of {1} and {0} is {2}'.format(a, b, sum))
 
 
 #value based formatting
-print("{a} and {b}".format(a=5, b=20))
+print("line 60 {a} and {b}".format(a=10, b=5))
 
 
 '''

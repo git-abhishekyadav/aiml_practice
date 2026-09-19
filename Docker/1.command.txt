@@ -1,0 +1,280 @@
+If someone has linux where nodejs application is working
+where 
+nodejs v16 
+mongo v4.2
+
+and there's new team member has macOs
+then we have to replicate above environment into macOs
+he will manually install package one by one
+
+
+one by one manually installing there can be error
+where there might be package which only works on linux old version
+
+larger teams can have multiple dependencies and can give rise to problem 
+
+It works on my machine
+
+Docker help us encounter this problem
+
+Docker container 
+    app + dependencies
+
+linux -> mac
+
+
+different version of application can be used in same container on single machine
+
+
+
+Docker image  is like class
+Docker container is  like object which occupy the memory
+
+
+
+Docker image Executable file which has instruction to build docker container
+
+
+
+'''
+    docker pull image_name
+
+    docker images
+
+
+    //to build container from image
+    docker run image_name
+    docker run -it image_name           //interactive mode -> allows us access to container terminal 
+
+run      // new container
+
+start     //restart existing container
+
+stop        //stop container
+
+    docker stop cont_name or cont_id
+
+    docker start cont_name or cont_id
+
+    env                                 //env variables
+
+    docker ps -a                        //container list
+
+    docker ps                           // running container
+
+
+    docker rmi image_name               // image remove
+
+    docker rm cont_name                 //container remove
+
+    docker pull mysql                   //latest
+    docker pull mysql:8.0               // different version
+
+    docker pull image_name:version      
+
+    docker run -d image_name            // -d -> detach mode -> container can run in background
+
+    docker run -d -e MYSQL_ROOT_PASSWORD=secret mysql      
+    // -e environment varibale declare  MYSQL_ROOT_PASSWORD 
+
+    docker run --name cont_name -d image_name
+
+
+    PORT BINDING
+
+    docker run -p8080:3306 image_name
+
+
+    docker ps -a
+CONTAINER ID   IMAGE       COMMAND                  CREATED              STATUS              PORTS                 NAMES
+a920e107a058   mysql:8.0   "docker-entrypoint.s…"   About a minute ago   Up About a minute   3306/tcp, 33060/tcp   mysql-older
+94a2d862bea6   mysql       "docker-entrypoint.s…"   3 minutes ago        Up 3 minutes        3306/tcp, 33060/tcp   mysql-latest
+
+
+same port 3306 
+not port of host machine it is container port
+host port and container port are different
+
+we can use -p to bind the host port to container port
+
+-phost_port:container_port
+
+host port map with container port, this mapping process is called port binding
+
+ -> $ docker run -d -e MYSQL_ROOT_PASSWORD=secret --name mysql-older -p8080:3306  mysql:8.0
+8714fa05fd075992a879c4e16f86fae82e6766099065253259a47da3cba162ab
+ -> $ docker ps
+CONTAINER ID   IMAGE       COMMAND                  CREATED          STATUS          PORTS                                         NAMES
+8714fa05fd07   mysql:8.0   "docker-entrypoint.s…"   12 seconds ago   Up 11 seconds   0.0.0.0:8080->3306/tcp, [::]:8080->3306/tcp   mysql-older
+ -> $ docker run -d -e MYSQL_ROOT_PASSWORD=secret --name mysql-latest -p8080:3306  mysql:8.0
+a5a549595f4656c2c14ec7a8aa92b76b2d4752b240f0364055c0f40d3b7f8d34
+docker: Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint mysql-latest (221dbb91f1966b4cb0ef2bcc7d4085b1712dd33e5844b19487dfddf89b05a443): Bind for 0.0.0.0:8080 failed: port is already allocated
+
+
+the container is different object having 3306 port
+But the host port can't be same 
+'''
+
+    docker image are made up of different layers
+
+        container
+        layer2          // below container readonly immutable layers we can't change them only container layer can be changed
+        layer1
+        base layer      -> linux -> debian,alpine
+
+abhishek@abhishek-HP-ProBook-440-G8-Notebook-PC:~/Downloads$ docker pull mysql
+Using default tag: latest
+latest: Pulling from library/mysql
+a869fc9d8287: Pull complete                     //layers
+1efac44fb104: Pull complete                     //layers
+248998660116: Pull complete     
+2f1d011bdd77: Pull complete 
+d61b3579fc6c: Pull complete 
+f5703b642196: Pull complete 
+ee778d752aff: Pull complete 
+13c85306055e: Pull complete 
+13707ba66837: Pull complete 
+7c4ffcc46f7c: Pull complete 
+afd4b55f41d0: Download complete 
+4c01ad9af86a: Download complete 
+Digest: sha256:45abdd9b4144660b5c93a5b7d0ebb21e024f0ba9851ecb4ab43bf83c6bf83592
+Status: Downloaded newer image for mysql:latest
+docker.io/library/mysql:latest
+abhishek@abhishek-HP-ProBook-440-G8-Notebook-PC:~/Downloads$  
+
+
+
+
+'''
+    TROUBLESHOOT COMMANDS
+
+    docker logs container_id
+
+    docker exec -it cont_id /bin/bash           //allows us run additional command on already running container 
+
+    docker exec -it cont_id /bin/sh             // not every containers contains bash so use shell sh
+
+by accessing terminal we can check files, env and dependencies
+
+$ docker exec -it mysql-older /bin/bash
+bash-5.1# env
+MYSQL_MAJOR=8.0
+HOSTNAME=75af723080bd
+PWD=/
+MYSQL_ROOT_PASSWORD=secret
+HOME=/root
+MYSQL_VERSION=8.0.46-1.el9
+GOSU_VERSION=1.19
+TERM=xterm
+SHLVL=1
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+MYSQL_SHELL_VERSION=8.0.46-1.el9
+_=/usr/bin/env
+bash-5.1# 
+
+
+''' 
+
+
+
+''''
+    DOCKER VS VM
+
+    Hardware -> HOST OS Kernal -> Application Layer
+
+    docker uses host kernal and application layer is virtualised
+        lightweight
+        faster
+            disadvantage 
+                initialy built for linux OS so majority are linux based images
+
+            so to run on other OS
+                   
+        Docker desktop 
+          add  lightweight hyperviser layer to the system which internally uses lightweight linux distribution
+            then we run container on non linux  
+
+            i.e small linux based VM helps run the container on non linux OS
+
+
+    VM  it virtualises HOST OS kernal and application layer
+        heavy
+
+        compatible with all OS
+
+'''''
+
+
+
+'''
+    DOCKER NETWORK
+
+        2 different container interact without any port without any limitation 
+
+
+    docker network ls
+
+    docker network create network_name
+
+        eg. docker network create mongo-network
+
+'''
+
+
+setup mongo and mongo-express
+
+docker run -d 
+    -p27012:27017
+    --name mongo
+    --network mongo-network
+    -e MONGO_INITDB_ROOT_USERNAME = admin
+    -e MONGO_INITDB_ROOT_PASSWORD = qwerty
+
+
+on terminal
+ docker run -d \                //just enter
+> -p27017:27017 \
+> --name mongo \
+> --network mongo-network \
+> -e MONGO_INITDB_ROOT_USERNAME=admin \
+> -e MONGO_INITDB_ROOT_PASSWORD=qwerty \
+> mongo
+
+$ docker run -d \
+> -p8081:8081 \
+> --name mongo-express \
+> --network mongo-network \
+> -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \
+> -e ME_CONFIG_MONGODB_ADMINPASSWORD=qwerty \
+> -e ME_CONFIG_MONGODB_URL="mongodb://admin:qwerty@mongo:27017" \
+> mongo-express
+
+
+
+if mongodb not installed on main system
+
+install mongosh
+and mongod
+'''
+latest mongodb had issue with kernal7.0
+
+so
+'''
+docker rm -f mongo mongo-express
+
+docker run -d \
+  --name mongo \
+  --network mongo-network \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=qwerty \
+  mongo:7.0
+
+docker run -d \
+  --name mongo-express \
+  --network mongo-network \
+  -p 8081:8081 \
+  -e ME_CONFIG_MONGODB_URL="mongodb://admin:qwerty@mongo:27017/?authSource=admin" \
+  -e ME_CONFIG_BASICAUTH_USERNAME="admin" \
+  -e ME_CONFIG_BASICAUTH_PASSWORD="pass" \
+  mongo-express
+

@@ -1,0 +1,46 @@
+'''
+    Conda 
+    package and environment management system
+
+
+simultaneously build 
+    project python 3.12 v1
+
+    project python 3.10  v2
+
+
+different tools and their different versions
+
+logical seperation
+'''
+
+conda --version
+
+conda list
+
+conda env list
+
+conda create -n {NAME}
+eg. conda create -n test-env
+
+
+conda activate test-env
+
+conda deactivate
+
+# delete conda env
+conda env remove -n test-env
+# delete conda env
+conda remove -n test-env --all
+
+conda activate
+
+
+conda install jupyter
+
+jupyter notebook
+
+
+conda install jupyterlab
+
+jupyter lab  
