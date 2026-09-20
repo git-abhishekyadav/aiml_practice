@@ -218,6 +218,8 @@ bash-5.1#
 
         eg. docker network create mongo-network
 
+    docker network rm network_name
+ 
 '''
 
 
@@ -278,3 +280,209 @@ docker run -d \
   -e ME_CONFIG_BASICAUTH_PASSWORD="pass" \
   mongo-express
 
+
+
+Running above command alone is difficult
+
+SO there
+
+    DOCKER COMPOSE 
+
+    '''
+        Docker compose is a tool for defining and running multi-container application
+
+        into yaml file
+
+
+        docker compose -f file_name.yaml up -d
+
+        //-f for file 
+        // up to create and start container 
+        // -d in detach mode
+
+        docker compose -f file_name.yaml down
+        
+        // down -> container delete remove 
+        
+    '''
+
+We didn't wrote network in yaml file 
+   docker compose create a default network for all of the container and 
+    inside the default network it runs all of the container
+
+
+Old data in database are removed when containers are stop
+
+so for data persistance we use volume
+
+
+
+
+'''
+    DOCKERIZING OUR APP
+
+    test app -> Docker image -> Container
+'''
+
+
+converting our application like nodejs server, react into docker container manually  but in production
+this done by jenkins
+Jenkins converts all application  into docker image for public or private repositories can be published
+
+so everyone can access it
+
+
+to Dockerize a application
+Dockerfile is created in that application
+
+Dockerfile is an blueprint how our docker image and docker container will build
+
+
+'''
+    important Dockerfile instruction
+
+    FROM  base_image        //Nodejs application requires node if there's no node we will not be able to run it
+                            so that base image is that node image 
+    WORKDIR     
+        working directory or the path in the image where files will be copied and command will be executed
+    COPY        //host -> image
+    RUN         // to run a specific command
+            can have multiple run command 
+    CMD         but only one CMD command
+                // if setup is done then CMD like node server,js will be the CMD to run the container
+
+    EXPOSE      image port expose
+    ENV         env variables
+''' 
+
+
+
+testapp         |   
+   \/           |
+  node          |
+   \/           |
+ debian         |
+                /\
+                layers
+
+'''
+
+docker build -t testapp:1.0 .
+
+
+-t tag 1.0
+. at end directory select where your dockerfile is available
+
+
+docker run testapp:1.0
+
+docker run -it testapp:1.0 bash
+'''
+
+
+
+
+we have 3 different images now
+
+~/Desktop/Github/aiml_practice/Docker$ docker images
+                                                                                                                                                                  i Info →   U  In Use
+IMAGE                  ID             DISK USAGE   CONTENT SIZE   EXTRA
+mongo-express:latest   1b23d7976f02        287MB         59.8MB    U   
+mongo:7.0              9854f7139445       1.18GB          299MB    U   
+testapp:1.0            8748d55d59ff       1.79GB          446MB    U   
+
+
+now we will use docker conpose to run 3 different container and interact each other
+
+
+'''
+// To push the image on docker hub first login
+
+
+docker login
+
+docker push image_name_on_docker_hub
+
+
+then you can
+docker pull image_name_on_docker
+
+
+docker logout
+'''
+
+
+'''
+    DOCKER VOLUME
+
+    volumes are persistent data stores for container
+
+    even container is deleted we still have access to the data volume
+
+    multiple container can same volume can be attached
+'''
+
+docker run -it -v host_path:cont_path ubuntu 
+
+
+docker start cont_id
+
+docker exec -it cont_id /bin/bash
+
+
+
+in compose yaml file
+
+ volumes:
+    - /home/abhishek/Documents/data:/data/db
+
+eg.2.compose.yaml
+the db data is persistent there because of volume when we delete the container and then create new container 
+we can still see localhost:8081
+
+
+'''
+    docker volume ls
+
+    docker volume create vol_name        //named volume it creates a volume on host 
+
+         windows   c:\ProgramData\docker\volumes
+       linux and mac //it creates in /var/lib/docker/volumes
+
+    docker volume rm vol_name
+
+'''
+
+Named volumes are isolated and not attached on the container
+
+so to attach volume to running container 
+
+--volume  or -v
+--mount
+
+
+NAMED VOLUME
+docker run -v vol_name:cont_dir
+
+for prod we prefer named volumes
+
+
+
+ANONMYOUS VOLUME
+docker run -v MOUNT_PATH          // cont_dir
+
+    for temporary storage
+
+
+BIND MOUNT
+
+docker run -v host_dir:cont_dir
+
+
+
+same things can be with mount
+
+
+
+docker volume prune
+        anonmymous volume unused

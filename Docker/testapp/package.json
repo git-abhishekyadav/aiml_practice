@@ -1,0 +1,13 @@
+{
+  "name": "mongo-test-server",
+  "version": "1.0.0",
+  "description": "Simple Node.js server that connects to a local MongoDB (Docker)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongodb": "^6.9.0"
+  }
+}
