@@ -226,7 +226,7 @@ bash-5.1#
 setup mongo and mongo-express
 
 docker run -d 
-    -p27012:27017
+    -p27017:27017
     --name mongo
     --network mongo-network
     -e MONGO_INITDB_ROOT_USERNAME = admin
@@ -462,21 +462,21 @@ so to attach volume to running container
 
 
 NAMED VOLUME
-docker run -v vol_name:cont_dir
+> docker run -v vol_name:cont_dir
 
 for prod we prefer named volumes
 
 
 
 ANONMYOUS VOLUME
-docker run -v MOUNT_PATH          // cont_dir
+> docker run -v MOUNT_PATH          // cont_dir
 
     for temporary storage
 
 
 BIND MOUNT
 
-docker run -v host_dir:cont_dir
+> docker run -v host_dir:cont_dir
 
 
 
@@ -484,5 +484,33 @@ same things can be with mount
 
 
 
-docker volume prune
+> docker volume prune
         anonmymous volume unused
+
+
+Docker networking
+Docker networking lets containers communicate with each other, the host, and external networks.
+
+Common network types:
+
+bridge — Default for containers on a single Docker host. Containers on the same user-defined bridge can communicate by container name.
+
+host — Container shares the host's network stack; no separate container IP.
+
+none — Disables networking.
+
+overlay — Connects containers across multiple Docker hosts, commonly with Docker Swarm.
+
+Useful commands:
+
+docker network ls
+docker network inspect bridge
+docker network create mynet
+docker run --network mynet --name app nginx
+
+Example:
+
+app ──┐
+      ├── mynet ── Docker host ── Internet
+db  ──┘
+
