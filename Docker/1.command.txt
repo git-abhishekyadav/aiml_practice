@@ -369,6 +369,8 @@ testapp         |
 
 docker build -t testapp:1.0 .
 
+testapp -> image_name
+
 
 -t tag 1.0
 . at end directory select where your dockerfile is available
